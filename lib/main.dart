@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tech_task_master/presentation/helper/navigator.dart';
 import 'package:flutter_tech_task_master/presentation/ingredent/bloc/ingredients_bloc.dart';
+import 'package:flutter_tech_task_master/presentation/ingredent/ingredient_view.dart';
+import 'package:flutter_tech_task_master/presentation/recipe/bloc/recipe_bloc.dart';
 
 import 'core/di/injector.dart';
-import 'presentation/ingredient_view/ingredient_view.dart';
 
 void main() async {
   await initializeCore();
@@ -29,6 +30,7 @@ class _MyAppState extends State<MyApp> {
         primarySwatch: Colors.blue,
       ),
       home: MultiBlocProvider(providers: [
+        BlocProvider<RecipeBloc>(create: (_) => RecipeBloc(inject())),
         BlocProvider<IngredientsBloc>(
             create: (_) =>
                 IngredientsBloc(inject())..add(const SelectDateEvent())),

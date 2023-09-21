@@ -44,7 +44,7 @@ class IngredientState extends Equatable {
 
   @override
   String toString() {
-    return '''GamezzState {result: ${result.length}, search: $search , loading: $isLoading }''';
+    return '''IngredientState {result: ${result.length}, search: $search , loading: $isLoading }''';
   }
 
   @override

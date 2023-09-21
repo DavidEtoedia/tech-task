@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_tech_task_master/core/di/injector.dart';
-import 'package:flutter_tech_task_master/presentation/ingredient_view/bloc/ingredients_bloc.dart';
+import 'package:flutter_tech_task_master/presentation/helper/navigator.dart';
+import 'package:flutter_tech_task_master/presentation/ingredent/bloc/ingredients_bloc.dart';
+import 'package:flutter_tech_task_master/presentation/ingredent/widget/ingredient_card.dart';
+import 'package:flutter_tech_task_master/presentation/recipe/bloc/recipe_bloc.dart';
+import 'package:flutter_tech_task_master/presentation/recipe/recipe_screen.dart';
 import 'package:flutter_tech_task_master/presentation/widgets/text_form.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -13,11 +17,24 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController date = TextEditingController();
+  final recipe = RecipeBloc(inject());
   DateTime selectedDate = DateTime.now();
-  final event = IngredientsBloc(inject());
-  @override
-  void initState() {
-    super.initState();
+
+  final List<String> selected = [];
+
+  void add(String value) {
+    if (!selected.contains(value) && (selected.length < 2)) {
+      selected.add(value);
+      setState(() {});
+    } else {
+      selected.remove(value);
+      setState(() {});
+    }
+  }
+
+  void removeAll() {
+    selected.clear();
+    setState(() {});
   }
 
   @override
@@ -43,6 +60,7 @@ class _HomeScreenState extends State<HomeScreen> {
               readOnly: true,
               suffixIcon: IconButton(
                   onPressed: () {
+                    if (date.text.isEmpty) return;
                     setState(() => date.text = "");
                     if (mounted) {
                       BlocProvider.of<IngredientsBloc>(context)
@@ -82,30 +100,65 @@ class _HomeScreenState extends State<HomeScreen> {
                   return const CircularProgressIndicator();
                 } else if (state.result.isNotEmpty) {
                   return Expanded(
-                      child: ListView.separated(
-                    physics: const AlwaysScrollableScrollPhysics(
-                        parent: BouncingScrollPhysics()),
-                    itemCount: state.result.length,
-                    itemBuilder: (context, index) {
-                      var food = state.result[index];
-                      return Container(
-                        padding: const EdgeInsets.all(20),
-                        color: Colors.grey.shade300,
-                        child: Row(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
                           children: [
-                            Text(food.title.toString()),
-                            const Spacer(),
-                            Text(
-                              food.useby.toString(),
-                            )
+                            const Expanded(
+                              child: Text(
+                                "Select only 2 ingredients and get their recipes",
+                                style: TextStyle(
+                                    fontSize: 15, fontWeight: FontWeight.w400),
+                              ),
+                            ),
+                            TextButton(
+                                onPressed: () {
+                                  if (selected.length < 2) return;
+
+                                  recipe.add(RecipeEvent.getRecipe(
+                                      ingredentA: selected[0],
+                                      ingredentB: selected[1]));
+
+                                  removeAll();
+                                  context.navigate(BlocProvider.value(
+                                    value: recipe,
+                                    child: const RecipeScreen(),
+                                  ));
+                                },
+                                child: const Text(
+                                  "Get Recipe",
+                                ))
                           ],
                         ),
-                      );
-                    },
-                    separatorBuilder: (context, index) => const SizedBox(
-                      height: 10,
+                        const SizedBox(
+                          height: 20,
+                        ),
+                        Expanded(
+                            child: GridView.builder(
+                          physics: const AlwaysScrollableScrollPhysics(
+                              parent: BouncingScrollPhysics()),
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount: 2,
+                                  mainAxisSpacing: 7.0,
+                                  crossAxisSpacing: 10.0,
+                                  childAspectRatio: 2),
+                          itemCount: state.result.length,
+                          itemBuilder: (context, index) {
+                            var food = state.result[index];
+                            return IngredientCard(
+                              food: food,
+                              color: selected.contains(food.title.toString())
+                                  ? Colors.blue
+                                  : Colors.transparent,
+                              onTap: () => add(food.title.toString()),
+                            );
+                          },
+                        )),
+                      ],
                     ),
-                  ));
+                  );
                 }
                 return const CircularProgressIndicator();
               },
