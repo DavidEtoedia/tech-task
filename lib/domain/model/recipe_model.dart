@@ -1,13 +1,15 @@
 import 'dart:convert';
 
+import 'package:equatable/equatable.dart';
+
 List<RecipeModel> recipeModelFromJson(String str) => List<RecipeModel>.from(
     json.decode(str).map((x) => RecipeModel.fromJson(x)));
 
-class RecipeModel {
-  String? title;
-  List<String>? ingredients;
+class RecipeModel extends Equatable {
+  final String? title;
+  final List<String>? ingredients;
 
-  RecipeModel({
+  const RecipeModel({
     this.title,
     this.ingredients,
   });
@@ -18,4 +20,7 @@ class RecipeModel {
             ? []
             : List<String>.from(json["ingredients"]!.map((x) => x)),
       );
+
+  @override
+  List<Object?> get props => [title, ingredients];
 }

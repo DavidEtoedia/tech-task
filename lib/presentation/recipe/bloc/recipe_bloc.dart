@@ -13,7 +13,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
 
   final FoodUseCase _foodUseCase;
 
-  void _loadRecipe(RecipeEvent event, emit) async {
+  Future<void> _loadRecipe(RecipeEvent event, emit) async {
     try {
       if (event is _GetRecipe) {
         emit(state.copyWith(isLoading: true));

@@ -1,6 +1,6 @@
 part of 'recipe_bloc.dart';
 
-class RecipeEvent {
+class RecipeEvent extends Equatable {
   const RecipeEvent();
 
   factory RecipeEvent.started() => const _Started();
@@ -11,6 +11,9 @@ class RecipeEvent {
   }) {
     return _GetRecipe(ingredentA: ingredentA, ingredentB: ingredentB);
   }
+
+  @override
+  List<Object?> get props => [];
 }
 
 class _Started extends RecipeEvent {
@@ -25,4 +28,7 @@ class _GetRecipe extends RecipeEvent {
     required this.ingredentA,
     required this.ingredentB,
   });
+
+  @override
+  List<Object?> get props => [ingredentA, ingredentB];
 }

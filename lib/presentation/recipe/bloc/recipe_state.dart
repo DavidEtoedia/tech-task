@@ -6,7 +6,7 @@ class RecipeState extends Equatable {
   final bool isLoading;
 
   const RecipeState({
-    this.errorMessage,
+    this.errorMessage = '',
     required this.result,
     required this.isLoading,
   });
@@ -30,7 +30,7 @@ class RecipeState extends Equatable {
 
   @override
   String toString() {
-    return '''RecipeState {result: ${result.length}, loading: $isLoading }''';
+    return '''RecipeState {result: ${result.length}, loading: $isLoading , errorMessage: $errorMessage }''';
   }
 
   @override
