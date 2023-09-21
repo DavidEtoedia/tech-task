@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('RecipeEvent', () {
-    group('Select RecipeEvent', () {
+    group('Create Recipe Event', () {
       test('supports value comparisons', () {
         expect(
             RecipeEvent.getRecipe(

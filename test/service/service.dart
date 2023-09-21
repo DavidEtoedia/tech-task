@@ -38,7 +38,7 @@ void main() {
         (_) async => Future.value(List<RecipeModel>.from(
             response.data.map((x) => RecipeModel.fromJson(x)))));
 
-    final res = await mockService.ingredients();
-    expect(res, isA<List<Ingredients>>());
+    final res = await mockService.recipes("IngredientA", "IngredientB");
+    expect(res, isA<List<RecipeModel>>());
   });
 }

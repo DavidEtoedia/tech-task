@@ -49,7 +49,8 @@ class IngredientState extends Equatable {
   }
 
   @override
-  List<Object?> get props => [result, errorMessage, isLoading, status, search];
+  List<Object?> get props => [result, status, search, isLoading, errorMessage];
+
   @override
   bool? get stringify => true;
 }

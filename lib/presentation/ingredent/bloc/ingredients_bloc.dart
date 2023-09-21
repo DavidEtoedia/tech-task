@@ -23,10 +23,8 @@ class IngredientsBloc extends Bloc<SelectDateEvent, IngredientState> {
             status: Status.success,
             result: response,
             search: response,
-            errorMessage: "",
             isLoading: false));
       }
-
       if (event is _DatePressed) {
         if (event.data.isEmpty) {
           emit(state.copyWith(result: state.search, errorMessage: ""));
@@ -36,7 +34,12 @@ class IngredientsBloc extends Bloc<SelectDateEvent, IngredientState> {
                   .toLowerCase()
                   .contains(event.data.toLowerCase()))
               .toList();
-          emit(state.copyWith(result: List.of(res), errorMessage: ""));
+
+          if (res.isEmpty) {
+            emit(state.copyWith(errorMessage: "Not Found"));
+          } else {
+            emit(state.copyWith(result: List.of(res)));
+          }
         }
       }
     } catch (e, _) {

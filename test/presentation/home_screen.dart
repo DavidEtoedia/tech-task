@@ -19,18 +19,17 @@ void main() {
     initializeCore();
   });
 
+  tearDown(() {
+    inject.reset();
+  });
+
   testWidgets('Find Specific text on the screen', (WidgetTester tester) async {
     whenListen(
       ingredientBloc,
       Stream.fromIterable([
         const IngredientState(
-            errorMessage: "",
-            result: [],
-            status: Status.initial,
-            search: [],
-            isLoading: true),
+            result: [], status: Status.initial, search: [], isLoading: true),
         const IngredientState(
-            errorMessage: "",
             result: [
               Ingredients(),
             ],
@@ -39,11 +38,7 @@ void main() {
             isLoading: false),
       ]),
       initialState: const IngredientState(
-          errorMessage: "",
-          result: [],
-          status: Status.initial,
-          search: [],
-          isLoading: false),
+          result: [], status: Status.initial, search: [], isLoading: false),
     );
     await tester.pumpWidget(
       BlocProvider<IngredientsBloc>.value(
@@ -64,11 +59,7 @@ void main() {
   testWidgets('Find a circular progress indicator',
       (WidgetTester tester) async {
     when(() => ingredientBloc.state).thenReturn(const IngredientState(
-        errorMessage: "",
-        result: [],
-        status: Status.initial,
-        search: [],
-        isLoading: true));
+        result: [], status: Status.initial, search: [], isLoading: true));
     await tester.pumpWidget(
       BlocProvider<IngredientsBloc>.value(
         value: ingredientBloc,
@@ -81,10 +72,9 @@ void main() {
 
   testWidgets('Find a Gridview when is success', (WidgetTester tester) async {
     when(() => ingredientBloc.state).thenReturn(const IngredientState(
-        errorMessage: "",
-        result: [Ingredients()],
+        result: [Ingredients(title: "Ham", useby: "2020-12-03")],
         status: Status.success,
-        search: [Ingredients()],
+        search: [Ingredients(title: "Ham", useby: "2020-12-03")],
         isLoading: false));
     await tester.pumpWidget(
       BlocProvider<IngredientsBloc>.value(

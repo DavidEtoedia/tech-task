@@ -18,5 +18,5 @@ class Ingredients extends Equatable {
   List<Object?> get props => [title, useby];
 
   @override
-  bool get stringify => true; // Set this to true for better debug output
+  bool get stringify => true;
 }

@@ -14,8 +14,6 @@ class Nav {
 
   /// Push a named route
   void pushTop(String routeName) {
-    // logger.i('Nav: Current Route -> ${(routeName)}');
-
     state!.pushNamed(routeName);
   }
 

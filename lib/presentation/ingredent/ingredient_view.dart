@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_tech_task_master/core/di/injector.dart';
-import 'package:flutter_tech_task_master/presentation/helper/navigator.dart';
 import 'package:flutter_tech_task_master/presentation/ingredent/bloc/ingredients_bloc.dart';
-import 'package:flutter_tech_task_master/presentation/ingredent/widget/ingredient_card.dart';
-import 'package:flutter_tech_task_master/presentation/recipe/bloc/recipe_bloc.dart';
-import 'package:flutter_tech_task_master/presentation/recipe/recipe_screen.dart';
+import 'package:flutter_tech_task_master/presentation/ingredent/widget/ingredient_list.dart';
 import 'package:flutter_tech_task_master/presentation/widgets/text_form.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -17,25 +13,7 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController date = TextEditingController();
-  final recipe = RecipeBloc(inject());
   DateTime selectedDate = DateTime.now();
-
-  final List<String> selected = [];
-
-  void add(String value) {
-    if (!selected.contains(value) && (selected.length < 2)) {
-      selected.add(value);
-      setState(() {});
-    } else {
-      selected.remove(value);
-      setState(() {});
-    }
-  }
-
-  void removeAll() {
-    selected.clear();
-    setState(() {});
-  }
 
   @override
   void dispose() {
@@ -77,13 +55,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 );
 
                 if (picked != null) {
-                  DateTime originalDateTime =
-                      DateTime.parse(picked.toIso8601String());
-
-                  String convertedDate =
-                      "${originalDateTime.year}-${originalDateTime.month.toString().padLeft(2, '0')}-${originalDateTime.day.toString().padLeft(2, '0')}";
-                  date.text = convertedDate;
-
+                  date.text = onDate(picked);
                   if (mounted) {
                     BlocProvider.of<IngredientsBloc>(context)
                         .add(SelectDateEvent.datePressed(data: date.text));
@@ -94,73 +66,15 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 10,
             ),
-            BlocConsumer<IngredientsBloc, IngredientState>(
-              listener: (c, s) {},
+            BlocBuilder<IngredientsBloc, IngredientState>(
               builder: (context, state) {
                 if (state.isLoading) {
                   return const CircularProgressIndicator();
+                } else if (state.errorMessage!.isNotEmpty) {
+                  return Text(state.errorMessage.toString());
                 } else if (state.result.isNotEmpty) {
-                  return Expanded(
-                    key: const ValueKey(
-                        "Select only 2 ingredients and get their recipes"),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            const Expanded(
-                              child: Text(
-                                "Select only 2 ingredients and get their recipes",
-                                style: TextStyle(
-                                    fontSize: 15, fontWeight: FontWeight.w400),
-                              ),
-                            ),
-                            TextButton(
-                                onPressed: () {
-                                  if (selected.length < 2) return;
-
-                                  recipe.add(RecipeEvent.getRecipe(
-                                      ingredentA: selected[0],
-                                      ingredentB: selected[1]));
-
-                                  removeAll();
-                                  context.navigate(BlocProvider.value(
-                                    value: recipe,
-                                    child: const RecipeScreen(),
-                                  ));
-                                },
-                                child: const Text(
-                                  "Get Recipe",
-                                ))
-                          ],
-                        ),
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        Expanded(
-                            child: GridView.builder(
-                          physics: const AlwaysScrollableScrollPhysics(
-                              parent: BouncingScrollPhysics()),
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                                  crossAxisCount: 2,
-                                  mainAxisSpacing: 7.0,
-                                  crossAxisSpacing: 10.0,
-                                  childAspectRatio: 2),
-                          itemCount: state.result.length,
-                          itemBuilder: (context, index) {
-                            var food = state.result[index];
-                            return IngredientCard(
-                              food: food,
-                              color: selected.contains(food.title.toString())
-                                  ? Colors.blue
-                                  : Colors.transparent,
-                              onTap: () => add(food.title.toString()),
-                            );
-                          },
-                        )),
-                      ],
-                    ),
+                  return IngredientGrid(
+                    result: state.result,
                   );
                 }
                 return const CircularProgressIndicator();
@@ -170,5 +84,16 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     ));
+  }
+
+  String onDate(DateTime date) {
+    DateTime originalDateTime = DateTime.parse(date.toIso8601String());
+    return originalDateTime.toFormattedDateString();
+  }
+}
+
+extension DateTimeExtensions on DateTime {
+  String toFormattedDateString() {
+    return "$year-${month.toString().padLeft(2, '0')}-${day.toString().padLeft(2, '0')}";
   }
 }

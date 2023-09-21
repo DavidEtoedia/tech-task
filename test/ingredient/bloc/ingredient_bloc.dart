@@ -5,14 +5,14 @@ import 'package:flutter_tech_task_master/presentation/ingredent/bloc/ingredients
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockFoodUse extends Mock implements FoodUseCase {}
+import '../../mocks/mocks.dart';
 
 void main() {
   late FoodUseCase foodUseCase;
   late IngredientsBloc ingredientBloc;
 
   setUp(() {
-    foodUseCase = MockFoodUse();
+    foodUseCase = MockFoodUseCase();
     ingredientBloc = IngredientsBloc(foodUseCase);
   });
 
@@ -27,38 +27,11 @@ void main() {
         setUp: () {
           when(
             () => foodUseCase.getAllIngredients(),
-          ).thenAnswer(
-              (_) => Future<List<Ingredients>>.value([const Ingredients()]));
+          ).thenAnswer((_) => Future<List<Ingredients>>.value(
+              [const Ingredients(title: "A", useby: "B")]));
         },
         build: () => ingredientBloc,
         act: (bloc) => bloc.add(const SelectDateEvent()),
-        expect: () => <IngredientState>[
-          const IngredientState(
-              result: [],
-              status: Status.initial,
-              search: [],
-              isLoading: true,
-              errorMessage: ""),
-          const IngredientState(
-              result: [Ingredients()],
-              status: Status.success,
-              search: [Ingredients()],
-              isLoading: false,
-              errorMessage: "")
-        ],
-      );
-
-      blocTest<IngredientsBloc, IngredientState>(
-        'emits IngredientState is loading, IngredientState success -- displays date '
-        'when a date is selected',
-        setUp: () {
-          when(
-            () => foodUseCase.getAllIngredients(),
-          ).thenAnswer(
-              (_) => Future<List<Ingredients>>.value([const Ingredients()]));
-        },
-        build: () => ingredientBloc,
-        act: (bloc) => bloc.add(SelectDateEvent.datePressed(data: "")),
         expect: () => <IngredientState>[
           const IngredientState(
             result: [],
@@ -67,9 +40,38 @@ void main() {
             isLoading: true,
           ),
           const IngredientState(
-            result: [Ingredients()],
+            result: [Ingredients(title: "A", useby: "B")],
             status: Status.success,
-            search: [Ingredients()],
+            search: [Ingredients(title: "A", useby: "B")],
+            isLoading: false,
+          )
+        ],
+      );
+
+      blocTest<IngredientsBloc, IngredientState>(
+        'emits IngredientState is loading, IngredientState success '
+        'when a date is selected',
+        setUp: () {
+          when(
+            () => foodUseCase.getAllIngredients(),
+          ).thenAnswer((_) => Future<List<Ingredients>>.value(
+              [const Ingredients(title: "Ham", useby: "2012-2-12")]));
+        },
+        build: () => ingredientBloc,
+        act: (bloc) => bloc
+          ..add(const SelectDateEvent())
+          ..add(SelectDateEvent.datePressed(data: "2012-2-12")),
+        expect: () => <IngredientState>[
+          const IngredientState(
+            result: [],
+            status: Status.initial,
+            search: [],
+            isLoading: true,
+          ),
+          const IngredientState(
+            result: [Ingredients(title: "Ham", useby: "2012-2-12")],
+            status: Status.success,
+            search: [Ingredients(title: "Ham", useby: "2012-2-12")],
             isLoading: false,
           ),
         ],

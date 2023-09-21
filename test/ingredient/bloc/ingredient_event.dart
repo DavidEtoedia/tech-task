@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 
 void main() {
   group('IngredientEvent', () {
-    group('Select IngredientEvent', () {
+    group('Select Ingredient Event', () {
       test('supports value comparisons', () {
         expect(SelectDateEvent.datePressed(data: "data"),
             SelectDateEvent.datePressed(data: "data"));

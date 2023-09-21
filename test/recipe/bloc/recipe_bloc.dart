@@ -5,14 +5,14 @@ import 'package:flutter_tech_task_master/presentation/recipe/bloc/recipe_bloc.da
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../../ingredient/bloc/ingredient_bloc.dart';
+import '../../mocks/mocks.dart';
 
 void main() {
   late FoodUseCase foodUseCase;
   late RecipeBloc recipeBloc;
 
   setUp(() {
-    foodUseCase = MockFoodUse();
+    foodUseCase = MockFoodUseCase();
     recipeBloc = RecipeBloc(foodUseCase);
   });
 
@@ -20,7 +20,7 @@ void main() {
     test('initial state is RecipeState.initial', () {
       expect(recipeBloc.state, RecipeState.initial());
     });
-    group('Ingredient', () {
+    group('Recipe', () {
       blocTest<RecipeBloc, RecipeState>(
         'emits [RecipeState is loading, RecipeState success] '
         'when creating recipe',
