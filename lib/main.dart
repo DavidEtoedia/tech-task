@@ -23,19 +23,21 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'tech-task',
-      navigatorKey: navigator.key,
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: MultiBlocProvider(providers: [
-        BlocProvider<RecipeBloc>(create: (_) => RecipeBloc(inject())),
-        BlocProvider<IngredientsBloc>(
-            create: (_) =>
-                IngredientsBloc(inject())..add(const SelectDateEvent())),
-      ], child: const HomeScreen()),
-    );
+    return MultiBlocProvider(
+        providers: [
+          BlocProvider<RecipeBloc>(create: (_) => RecipeBloc(inject())),
+          BlocProvider<IngredientsBloc>(
+              create: (_) =>
+                  IngredientsBloc(inject())..add(const SelectDateEvent())),
+        ],
+        child: MaterialApp(
+          title: 'tech-task',
+          navigatorKey: navigator.key,
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+          ),
+          home: const HomeScreen(),
+        ));
   }
 }
 

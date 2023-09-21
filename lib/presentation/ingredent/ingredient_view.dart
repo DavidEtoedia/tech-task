@@ -94,12 +94,15 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(
               height: 10,
             ),
-            BlocBuilder<IngredientsBloc, IngredientState>(
+            BlocConsumer<IngredientsBloc, IngredientState>(
+              listener: (c, s) {},
               builder: (context, state) {
                 if (state.isLoading) {
                   return const CircularProgressIndicator();
                 } else if (state.result.isNotEmpty) {
                   return Expanded(
+                    key: const ValueKey(
+                        "Select only 2 ingredients and get their recipes"),
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [

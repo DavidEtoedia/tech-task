@@ -25,7 +25,7 @@ class FoodService {
     try {
       const url = AppUrl.recipe;
       final response = await _httpService.request(url, RequestMethod.get,
-          queryParams: {"ingredient": "$ingredientA, $ingredientB"});
+          queryParams: {"ingredient": "$ingredientA,$ingredientB"});
       return List<RecipeModel>.from(
           response.data.map((x) => RecipeModel.fromJson(x)));
     } catch (e) {

@@ -1,6 +1,6 @@
 part of 'ingredients_bloc.dart';
 
-class SelectDateEvent {
+class SelectDateEvent extends Equatable {
   const SelectDateEvent();
 
   factory SelectDateEvent.started() => const _Started();
@@ -10,6 +10,9 @@ class SelectDateEvent {
   }) {
     return _DatePressed(data: data);
   }
+
+  @override
+  List<Object?> get props => [];
 }
 
 class _Started extends SelectDateEvent {
@@ -22,4 +25,7 @@ class _DatePressed extends SelectDateEvent {
   const _DatePressed({
     required this.data,
   });
+
+  @override
+  List<Object?> get props => [data];
 }
