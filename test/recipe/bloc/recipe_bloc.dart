@@ -44,26 +44,3 @@ void main() {
     });
   });
 }
-
-class kResponse {
-  static var loginResponse = [
-    {
-      "title": "Ham and Cheese Toastie",
-      "ingredients": ["Ham", "Cheese", "Bread", "Butter"]
-    },
-    {
-      "title": "Salad",
-      "ingredients": [
-        "Lettuce",
-        "Tomato",
-        "Cucumber",
-        "Beetroot",
-        "Salad Dressing"
-      ]
-    },
-    {
-      "title": "Hotdog",
-      "ingredients": ["Hotdog Bun", "Sausage", "Ketchup", "Mustard"]
-    }
-  ];
-}
