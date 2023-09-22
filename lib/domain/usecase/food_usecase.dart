@@ -1,19 +1,16 @@
-import 'package:flutter_tech_task_master/data/datasource/food_impl_manager.dart';
 import 'package:flutter_tech_task_master/domain/model/ingredients.dart';
 import 'package:flutter_tech_task_master/domain/model/recipe_model.dart';
 import 'package:flutter_tech_task_master/domain/repository/food_repository.dart';
 
-class FoodUseCase implements FoodRepository {
-  final FoodImplManager _foodImplManager;
-  FoodUseCase({required FoodImplManager foodImplManager})
-      : _foodImplManager = foodImplManager;
+class FoodUseCase {
+  final FoodRepository _foodRepository;
+  FoodUseCase({required FoodRepository foodRepository})
+      : _foodRepository = foodRepository;
 
-  @override
-  Future<List<Ingredients>> getAllIngredients() async =>
-      await _foodImplManager.fetchIngredients();
+  Future<List<Ingredients>> fetchIngredients() async =>
+      await _foodRepository.getAllIngredients();
 
-  @override
-  Future<List<RecipeModel>> getAllRecipe(
+  Future<List<RecipeModel>> fetchRecipes(
           String ingredientA, String ingredientB) async =>
-      await _foodImplManager.fetchRecipe(ingredientA, ingredientB);
+      await _foodRepository.getAllRecipe(ingredientA, ingredientB);
 }

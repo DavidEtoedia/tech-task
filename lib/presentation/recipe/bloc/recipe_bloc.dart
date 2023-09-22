@@ -18,7 +18,7 @@ class RecipeBloc extends Bloc<RecipeEvent, RecipeState> {
       if (event is _GetRecipe) {
         emit(state.copyWith(isLoading: true));
         final response =
-            await _foodUseCase.getAllRecipe(event.ingredentA, event.ingredentB);
+            await _foodUseCase.fetchRecipes(event.ingredentA, event.ingredentB);
 
         emit(state.copyWith(result: response, isLoading: false));
       }

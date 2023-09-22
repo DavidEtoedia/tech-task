@@ -1,6 +1,7 @@
 import 'package:flutter_tech_task_master/core/service/network_service.dart';
 import 'package:flutter_tech_task_master/data/datasource/food_data_source.dart';
 import 'package:flutter_tech_task_master/data/datasource/food_impl_manager.dart';
+import 'package:flutter_tech_task_master/domain/repository/food_repository.dart';
 import 'package:flutter_tech_task_master/domain/usecase/food_usecase.dart';
 import 'package:flutter_tech_task_master/presentation/ingredent/bloc/ingredients_bloc.dart';
 import 'package:flutter_tech_task_master/presentation/recipe/bloc/recipe_bloc.dart';
@@ -33,12 +34,11 @@ void _initServices() {
 
 /// Initialize repository implementations
 void _initRepositories() {
-  inject
-      .registerLazySingleton<FoodImplManager>(() => FoodImplManager(inject()));
+  inject.registerLazySingleton<FoodRepository>(() => FoodImplManager(inject()));
 }
 
 /// Initialize Food use case here
 void _initializeUsecase() {
   inject.registerLazySingleton<FoodUseCase>(
-      () => FoodUseCase(foodImplManager: inject()));
+      () => FoodUseCase(foodRepository: inject()));
 }

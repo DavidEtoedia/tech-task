@@ -26,7 +26,7 @@ void main() {
         'when creating recipe',
         setUp: () {
           when(
-            () => foodUseCase.getAllRecipe("ingredentA", "ingredentB"),
+            () => foodUseCase.fetchRecipes("ingredentA", "ingredentB"),
           ).thenAnswer(
               (_) => Future<List<RecipeModel>>.value([const RecipeModel()]));
         },

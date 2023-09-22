@@ -26,7 +26,7 @@ void main() {
         'when app at start up succeeds',
         setUp: () {
           when(
-            () => foodUseCase.getAllIngredients(),
+            () => foodUseCase.fetchIngredients(),
           ).thenAnswer((_) => Future<List<Ingredients>>.value(
               [const Ingredients(title: "A", useby: "B")]));
         },
@@ -53,7 +53,7 @@ void main() {
         'when a date is selected',
         setUp: () {
           when(
-            () => foodUseCase.getAllIngredients(),
+            () => foodUseCase.fetchIngredients(),
           ).thenAnswer((_) => Future<List<Ingredients>>.value(
               [const Ingredients(title: "Ham", useby: "2012-2-12")]));
         },

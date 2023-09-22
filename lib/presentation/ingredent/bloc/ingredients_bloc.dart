@@ -17,7 +17,7 @@ class IngredientsBloc extends Bloc<SelectDateEvent, IngredientState> {
     try {
       if (state.status == Status.initial) {
         emit(state.copyWith(isLoading: true));
-        final response = await _foodUseCase.getAllIngredients();
+        final response = await _foodUseCase.fetchIngredients();
 
         emit(state.copyWith(
             status: Status.success,

@@ -8,8 +8,7 @@ import 'package:flutter_tech_task_master/presentation/ingredent/ingredient_view.
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
 
-class MockIngredientBloc extends MockBloc<SelectDateEvent, IngredientState>
-    implements IngredientsBloc {}
+import '../mocks/mocks.dart';
 
 void main() {
   late MockIngredientBloc ingredientBloc;
@@ -23,7 +22,8 @@ void main() {
     inject.reset();
   });
 
-  testWidgets('Find Specific text on the screen', (WidgetTester tester) async {
+  testWidgets('Find Specific text on Ingredient view screen',
+      (WidgetTester tester) async {
     whenListen(
       ingredientBloc,
       Stream.fromIterable([

@@ -13,17 +13,17 @@ void main() {
   });
 
   test("Ingredient usecase", () async {
-    when(() => mockFoodUsecase.getAllIngredients())
+    when(() => mockFoodUsecase.fetchIngredients())
         .thenAnswer((_) async => [const Ingredients(title: "", useby: "")]);
-    final res = await mockFoodUsecase.getAllIngredients();
+    final res = await mockFoodUsecase.fetchIngredients();
     expect(res, isA<List<Ingredients>>());
   });
 
   test("Recipe usecase", () async {
-    when(() => mockFoodUsecase.getAllRecipe("IngredientA", "IngredientB"))
+    when(() => mockFoodUsecase.fetchRecipes("IngredientA", "IngredientB"))
         .thenAnswer((_) async => [const RecipeModel()]);
     final res =
-        await mockFoodUsecase.getAllRecipe("IngredientA", "IngredientB");
+        await mockFoodUsecase.fetchRecipes("IngredientA", "IngredientB");
     expect(res, isA<List<RecipeModel>>());
   });
 }
