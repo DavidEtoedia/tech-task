@@ -20,7 +20,7 @@ class _IngredientGridState extends State<IngredientGrid> {
   final recipe = RecipeBloc(inject());
   final List<String> selected = [];
 
-  void add(String value) {
+  void addIngrdients(String value) {
     if (!selected.contains(value) && (selected.length < 2)) {
       selected.add(value);
       setState(() {});
@@ -30,7 +30,7 @@ class _IngredientGridState extends State<IngredientGrid> {
     }
   }
 
-  void removeAll() {
+  void clearAllSelectedIngrdients() {
     selected.clear();
     setState(() {});
   }
@@ -53,11 +53,11 @@ class _IngredientGridState extends State<IngredientGrid> {
               TextButton(
                   onPressed: () {
                     if (selected.length < 2) return;
-
                     recipe.add(RecipeEvent.getRecipe(
                         ingredentA: selected[0], ingredentB: selected[1]));
 
-                    removeAll();
+                    clearAllSelectedIngrdients();
+
                     context.navigate(BlocProvider.value(
                       value: recipe,
                       child: const RecipeScreen(),
@@ -88,7 +88,7 @@ class _IngredientGridState extends State<IngredientGrid> {
                 color: selected.contains(food.title.toString())
                     ? Colors.blue
                     : Colors.transparent,
-                onTap: () => add(food.title.toString()),
+                onTap: () => addIngrdients(food.title.toString()),
               );
             },
           )),

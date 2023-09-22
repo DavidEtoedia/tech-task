@@ -29,11 +29,7 @@ class IngredientsBloc extends Bloc<SelectDateEvent, IngredientState> {
         if (event.data.isEmpty) {
           emit(state.copyWith(result: state.search, errorMessage: ""));
         } else {
-          var res = state.search
-              .where((element) => element.useby!
-                  .toLowerCase()
-                  .contains(event.data.toLowerCase()))
-              .toList();
+          var res = _searchDate(event.data);
 
           if (res.isEmpty) {
             emit(state.copyWith(errorMessage: "Not Found"));
@@ -45,5 +41,12 @@ class IngredientsBloc extends Bloc<SelectDateEvent, IngredientState> {
     } catch (e, _) {
       emit(state.copyWith(errorMessage: e.toString()));
     }
+  }
+
+  List<Ingredients> _searchDate(String query) {
+    return state.search
+        .where((element) =>
+            element.useby!.toLowerCase().contains(query.toLowerCase()))
+        .toList();
   }
 }
